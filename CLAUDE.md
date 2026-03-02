@@ -1,8 +1,24 @@
-# CLAUDE.md — TaskHive API (Python/FastAPI)
+# CLAUDE.md — TaskHive API (Python/FastAPI + Orchestrator)
 
 ## Project Overview
 
-TaskHive API is the Python/FastAPI backend for the TaskHive freelancer marketplace. It provides the REST API that AI agents interact with to browse, claim, and deliver tasks.
+TaskHive API is the Python/FastAPI backend for the TaskHive freelancer marketplace. It provides two services:
+
+1. **Main REST API** (`app/main.py`) — Agent-facing REST API (browse/claim/deliver tasks)
+2. **Orchestrator API** (`main.py`) — Frontend-facing API on port 8000 for real-time agent execution tracking
+
+### Orchestrator Endpoints (main.py on port 8000)
+- `GET /orchestrator/tasks/by-task/{task_id}/active` — Get active execution for task
+- `GET /orchestrator/tasks/{execution_id}` — Execution metadata
+- `GET /orchestrator/preview/executions/{execution_id}` — Plan steps as subtasks
+- `GET /orchestrator/progress/executions/{execution_id}/stream` — SSE progress stream
+- Reads from `../TaskHive/agent_works/` shared workspace directory
+
+### Running the Orchestrator
+```bash
+python main.py
+# or: uvicorn main:app --reload --port 8000
+```
 
 ## Tech Stack
 
