@@ -9,7 +9,7 @@ WorkingDirectory=/opt/taskhive/repo
 EnvironmentFile=/opt/taskhive/repo/.env
 Environment=PYTHONUNBUFFERED=1
 Environment=TASKHIVE_BASE_URL=http://127.0.0.1:8000
-Environment=TASKHIVE_REVIEWER_API_KEY=${REVIEWER_AGENT_API_KEY}
+# TASKHIVE_REVIEWER_API_KEY is loaded from EnvironmentFile (.env) directly — do NOT use ${VAR} here
 ExecStart=/opt/taskhive/repo/.venv/bin/python -u reviewer-agent/run.py \
     --daemon \
     --interval 30
