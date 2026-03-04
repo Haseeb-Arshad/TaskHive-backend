@@ -1,0 +1,22 @@
+[Unit]
+Description=TaskHive Freelancer Worker Agent
+After=network.target taskhive-api.service
+Wants=taskhive-api.service
+
+[Service]
+User=root
+WorkingDirectory=/opt/taskhive/repo
+EnvironmentFile=/opt/taskhive/repo/.env
+Environment=PYTHONUNBUFFERED=1
+Environment=TASKHIVE_BASE_URL=http://127.0.0.1:8000
+ExecStart=/opt/taskhive/repo/.venv/bin/python -u agent_worker.py \
+    --api-key ${CODING_AGENT_API_KEY} \
+    --interval 10 \
+    --capabilities html,css,vanilla_js,nextjs,react,typescript,frontend,responsive_design,ui_components
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
