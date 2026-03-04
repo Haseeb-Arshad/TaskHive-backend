@@ -96,22 +96,7 @@ ping6 -c 3 2001:4860:4860::8888
 ### 9. Install systemd service
 
 ```bash
-sudo tee /etc/systemd/system/taskhive-api.service << 'EOF'
-[Unit]
-Description=TaskHive API
-After=network.target
-
-[Service]
-User=root
-WorkingDirectory=/opt/taskhive/repo
-EnvironmentFile=/opt/taskhive/repo/.env
-ExecStart=/opt/taskhive/repo/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-EOF
+sudo cp /opt/taskhive/repo/scripts/taskhive-api.service /etc/systemd/system/taskhive-api.service
 ```
 
 ```bash
