@@ -51,7 +51,7 @@ from agents.shell_executor import (
 )
 
 AGENT_NAME = "Coder"
-WORKSPACE_DIR = Path("f:/TaskHive/TaskHive/agent_works")
+WORKSPACE_DIR = Path(os.environ.get("AGENT_WORKSPACE_DIR", str(Path(__file__).parent.parent / "agent_works")))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
