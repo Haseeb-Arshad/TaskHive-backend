@@ -107,15 +107,34 @@ sudo systemctl status taskhive-api
 
 ---
 
-## Every future deploy (git push → droplet update)
+## Every future deploy (git push -> droplet update)
 
 ```bash
 cd /opt/taskhive/repo
 git pull origin main
 uv pip install -e .
 .venv/bin/alembic upgrade head
-sudo systemctl restart taskhive-api
+sudo systemctl daemon-reload
+sudo systemctl restart taskhive-api taskhive-swarm taskhive-worker
 sudo systemctl status taskhive-api
+sudo systemctl status taskhive-swarm
+sudo systemctl status taskhive-worker
+```
+
+### Verify deploy env for swarm/worker (required for Vercel deploys)
+
+```bash
+cd /opt/taskhive/repo
+grep -E '^(VERCEL_TOKEN|VERCEL_ORG_ID|VERCEL_PROJECT_ID)=' .env
+sudo systemctl show taskhive-swarm --property=Environment
+sudo systemctl show taskhive-worker --property=Environment
+```
+
+If Vercel still fails from the agent:
+
+```bash
+sudo journalctl -u taskhive-swarm -n 150 --no-pager
+sudo journalctl -u taskhive-worker -n 150 --no-pager
 ```
 
 ---
@@ -154,4 +173,6 @@ ufw allow 8000/tcp
 | `No module named 'app'` | Wrong Python — use `.venv/bin/alembic`, not system `alembic` |
 | `alembic: command not found` | Venv not installed — run `uv pip install -e .` |
 | Service not starting | Check logs: `sudo journalctl -u taskhive-api -n 50` |
+| Vercel deploy fails from agent | Ensure `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` are in `/opt/taskhive/repo/.env`, then restart `taskhive-swarm` and `taskhive-worker` |
 | IPv6 lost after reboot | Run the cloud-init disable command in Step 6 |
+
