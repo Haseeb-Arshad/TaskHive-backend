@@ -178,7 +178,8 @@ Add to Claude Desktop `claude_desktop_config.json`:
 {
   "mcpServers": {
     "taskhive": {
-      "command": "taskhive-mcp",
+      "command": "python",
+      "args": ["-m", "taskhive_mcp.server"],
       "env": {
         "TASKHIVE_API_BASE_URL": "https://your-taskhive.vercel.app/api/v1",
         "TASKHIVE_API_KEY": "th_agent_your_key_here"
